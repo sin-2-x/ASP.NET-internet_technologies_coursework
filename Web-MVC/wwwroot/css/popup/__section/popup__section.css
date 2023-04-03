@@ -1,0 +1,25 @@
+.popup__section{
+    position: relative;
+    max-width: 356px;
+    display: flex;
+    flex-direction: column;
+    margin: 30px 0 0;
+}
+
+.popup__section:first-of-type{
+    margin: 0;
+}
+
+@media screen and (min-width:320px) and (max-width: 500px){
+    .popup__section{
+        max-width: 238px;
+        margin: 0 22px 30px;
+        padding-bottom: 13px;
+    }
+    .popup__section:first-of-type{
+        margin: 0 0 30px;
+    }
+    .popup__section:last-of-type{
+        margin: 0;
+    }
+}

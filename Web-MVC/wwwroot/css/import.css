@@ -1,0 +1,30 @@
+@import url(normalize.css);
+@import url(../css/simpleBar/simpleBar.css);
+@import url(../css/calendar/calendar.css);
+@import url(../css/calendar/calendar_loader.css);
+@import url(../css/calendar/__day/calendar__day.css);
+@import url(../css/calendar/__day/calendar__day-good_day.css);
+@import url(../css/calendar/__day/calendar__day-bad_day.css);
+@import url(../css/calendar/__day/_text/calendar__day_text.css);
+@import url(../css/calendar/__day/_text/calendar__day_text-top.css);
+@import url(../css/calendar/__day/_text/calendar__day_text-bottom.css);
+@import url(../css/popup/popup.css);
+
+
+@import url(../css/popup/_opened/popup_opened.css);
+@import url(../css/popup/__form-container/popup__form-container.css);
+@import url(../css/popup/__closes/popup__closes.css);
+@import url(../css/popup/__container/popup__container.css);
+@import url(../css/popup/__title/popup__title.css);
+@import url(../css/popup/__admin/popup__admin.css);
+@import url(../css/popup/__section/popup__section.css);
+@import url(../css/popup/__input/popup__input.css);
+@import url(../css/popup/__input-error/popup__input-error.css);
+@import url(../css/popup/__input-error/_active/popup__input-error_active.css);
+@import url(../css/popup/__submit-button/popup__submit-button.css);
+@import url(../css/popup/__submit-button/_disable/popup__submit-button_disable.css);
+@import url(../css/popup/__overlay/popup__overlay.css);
+@import url(../css/popup/__form-container-figure/popup__form-container-figure.css);
+@import url(../css/popup/__overlay-figure/popup__overlay-figure.css);
+@import url(../css/popup/__photo-figure/popup__photo-figure.css);
+@import url(../css/popup/__input-figure/popup__input-figure.css);

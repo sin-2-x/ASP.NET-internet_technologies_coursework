@@ -1,0 +1,16 @@
+.popup__input-figure {
+    height: 12px;
+    font-family: Inter, Arial, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 15px;
+    color: #FFFFFF;
+    outline: none;
+    margin-top: 10px;
+}
+@media screen and (max-width: 899px) {
+    .popup__input-figure {
+        margin-top: 0px;
+    }
+}

@@ -1,0 +1,9 @@
+.calendar {
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-gap: 5px;
+    max-width: 1280px;
+    box-sizing: border-box;
+    margin-top: 26px;
+}

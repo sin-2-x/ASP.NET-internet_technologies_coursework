@@ -1,0 +1,5 @@
+.calendar__day {
+    border: solid;
+    border-radius: 15px;
+    height: 4.6rem;
+}

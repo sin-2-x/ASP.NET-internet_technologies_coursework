@@ -1,0 +1,17 @@
+﻿.calendar_loader {
+    animation: bounce 2s infinite ease-in-out;
+    z-index:1
+}
+
+@keyframes bounce {
+    from {
+        opacity:100%;
+    }
+    50% {
+        opacity: 0%;
+    }
+
+    to {
+        opacity: 100%;
+    }
+}
