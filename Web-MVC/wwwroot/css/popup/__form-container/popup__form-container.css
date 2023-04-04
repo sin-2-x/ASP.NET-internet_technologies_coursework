@@ -1,17 +1,19 @@
 .popup__form-container {
     width: 430px;
-    position: absolute;
-    /* top: 195px; */
-    left: 50%;
-    /* transform: translateX(-50%); */
-    top: 50%;
-    transform: translate(-50%, -50%);
-
+    z-index: 1001;
+    border-radius: 10px;
+    padding-left: 36px;
+    padding-right: 36px;
+    
+    background-color: #ffffff;
 }
 @media screen and (max-width: 899px) {
     .popup__form-container {
         position: fixed;
         margin: 0;
         width: 282px;
+        
+        padding-left: 22px;
+        padding-right: 22px;
     }
 }

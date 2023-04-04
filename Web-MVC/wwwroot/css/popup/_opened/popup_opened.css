@@ -1,5 +1,5 @@
 .popup_opened {
-    display: block;
+    /* display: block; */
     opacity: 1;
     visibility: visible;
 }
