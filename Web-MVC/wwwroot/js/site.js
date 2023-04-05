@@ -1,14 +1,19 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿import {PopupWithWasteList} from "./PopupWithWasteList.js";
+import {PopupWithForm} from "./PopupWithForm.js";
 
 let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 let calendar = document.querySelector(".calendar");
 
-let popupWasteList = document.querySelector(".popup_type_waste-list");
-popupWasteList.querySelector(".popup__dackground").addEventListener('click', closePopupWasteList);
+const popupWasteList = new PopupWithWasteList(".popup_type_waste-list");
+popupWasteList.setEventListeners();
 
-let popupCurrentWaste = document.querySelector(".popup_type_waste");
-popupCurrentWaste.querySelector(".popup__dackground-transparent").addEventListener('click', closePopupCurrentWaste);
+
+let popupCurrentWaste = new PopupWithForm({
+    popupSelector: ".popup_type_waste", 
+    handleFormSubmit: (data) => {console.log(data)
+    }});
+//popupCurrentWaste.querySelector(".popup__dackground-transparent").addEventListener('click', closePopupCurrentWaste);
+popupCurrentWaste.setEventListeners();
 
 let dropdownMenuButtonYear = document.querySelector("#dropdownMenuButtonYear");
 dropdownMenuButtonYear.addEventListener('click', setYearValues);
@@ -45,9 +50,8 @@ async function PopupWasteListOpen() {
 
     
     let dayNum = this.children[0].firstChild.wholeText;
-    popupWasteList.querySelector(".popup__title").textContent=`${dayNum}.${montDate.getMonth() + 1}.${montDate.getFullYear()}`;
-    popupWasteList.classList.add("popup_opened");
-    
+    popupWasteList.open(`${dayNum}.${montDate.getMonth() + 1}.${montDate.getFullYear()}`);
+    popupCurrentWaste.Parent = popupWasteList;
      wastesOfOneDay = await GetWastesOfDay(dayNum);
     let html = [];
     
@@ -59,11 +63,14 @@ async function PopupWasteListOpen() {
         waste.innerHTML =`
                 <div class="align-self-center">${wastesOfOneDay[i].value}</div>
                 <div class="align-self-center">${wastesOfOneDay[i].category}</div>`;
-        waste.onclick=PopupCurrentWasteOpen;
+        waste.onclick= (e)=>{
+            popupCurrentWaste.open(wastesOfOneDay[e.currentTarget.id]);
+        }
+        
         html.push(waste);
     }
    
-    let waistsHTML = popupWasteList.querySelector(".waists_list");
+    let waistsHTML = popupWasteList._popup.querySelector(".waists_list");
     waistsHTML.innerHTML = "";
     html.forEach(waste => {
         waistsHTML.appendChild(waste);
@@ -73,25 +80,6 @@ async function PopupWasteListOpen() {
         
     
 }
-
-function PopupCurrentWasteOpen(waste){
-    popupCurrentWaste.classList.add("popup_opened");
- 
-
-}
-
-function closePopupWasteList(){
-
-    popupWasteList.classList.remove("popup_opened");
-}
-
-function closePopupCurrentWaste(){
-
-    popupCurrentWaste.classList.remove("popup_opened");
-}
-
-
-
 
 async function GetWastesByDays() {
     //Находим эелмент календарь

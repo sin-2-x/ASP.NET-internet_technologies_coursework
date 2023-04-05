@@ -1,5 +1,5 @@
 .popup__form-container {
-    width: 430px;
+     width: 430px; 
     z-index: 1001;
     border-radius: 10px;
     padding-left: 36px;

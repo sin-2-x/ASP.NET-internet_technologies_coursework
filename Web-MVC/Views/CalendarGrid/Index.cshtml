@@ -28,7 +28,7 @@
 <div class="popup popup_type_waste-list">
   <div class="popup__dackground popup__dackground-dark"></div>
   <div class="popup__form-container popup__form-container_waste-list">
-      <h3 class="popup__title">Редактировать профиль</h3>
+      <h3 class="popup__title"></h3>
       <div style="height:20rem;" class="waists_list"></div>
       @*<form class="popup__admin popup__admin_profile" name="inform">
         <div class="popup__section">
@@ -46,22 +46,25 @@
 </div>
 
 <div class="popup popup_type_waste">
-  <div class="popup__dackground  popup__dackground-transparent"></div>
+  <div class="popup__dackground  popup__dackground-dark"></div>
   <div class="popup__form-container popup__form-container_wase">
 
-      <h3 class="popup__title">Редактировать профиль</h3>
-      <div style="height:20rem;" class="waists_list"></div>
-      @*<form class="popup__admin popup__admin_profile" name="inform">
+      <h3 class="popup__title">Трата</h3>
+      <form class="popup__current_waste popup__admin_profile" name="inform">
         <div class="popup__section">
-          <input type="text" placeholder="" class="popup__input popup__input_type_name" name="name" minlength="2" maxlength="40" required>
+          <input type="text" placeholder="" class="popup__input popup__input_type_name" name="sum" minlength="2" maxlength="40" required>
           <span class="popup__input-error"></span>
         </div>
         <div class="popup__section">
-          <input type="text" placeholder="" class="popup__input popup__input_type_job" name="about" minlength="2" maxlength="200" required>
+          <input type="text" placeholder="" class="popup__input popup__input_type_job" name="categ" minlength="2" maxlength="200" required>
+          <span class="popup__input-error"></span>
+        </div>
+        <div class="popup__section">
+          <input type="text" placeholder="" class="popup__input popup__input_type_name" name="comment" minlength="2" maxlength="40" required>
           <span class="popup__input-error"></span>
         </div>
         <button class="popup__submit-button popup__formsubmit-text" type="submit">Сохранить</button>
-      </form>*@
+      </form>
     </div>
 
 </div>
