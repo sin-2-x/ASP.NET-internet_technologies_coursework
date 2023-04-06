@@ -26,7 +26,7 @@ let montDate = new Date(2023, 2);
 function setYearValues() {
     for (let year = new Date().getFullYear(); year >= 1920; year--) {
         let options = document.createElement("div");
-        options.onclick = change;
+        //options.onclick = change;
         options.classList.add("dropdown-item");
         document.getElementById("dropdownMenuUlYear").appendChild(options).innerHTML = year;
         document.getElementById("dropdownMenuUlYear").appendChild(options).value = year;
@@ -37,7 +37,7 @@ function setYearValues() {
 function setMonthValues() {
     for (let month = 0; month < months.length; month++) {
         let options = document.createElement("div");
-        options.onclick = change;
+        //options.onclick = change;
         options.classList.add("dropdown-item");
         document.getElementById("dropdownMenuUlMonth").appendChild(options).innerHTML = months[month];
         document.getElementById("dropdownMenuUlMonth").appendChild(options).value = month;
