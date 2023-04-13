@@ -1,0 +1,19 @@
+.popup__button{
+
+    height: 50px;
+    background: #ffffff;
+    border-radius: 2px;
+    opacity: 1;
+    outline: none;
+    color: black;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 22px;
+    border-radius: 10px;
+    border-color: rgb(63, 90, 209);;
+    border-style: solid;
+  }
+  .popup__button:hover {
+    transition: link-hover 5s linear forwards;
+    opacity: 0.6;
+  }

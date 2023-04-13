@@ -1,11 +1,15 @@
 ﻿using baza.Models;
+using Elfie.Serialization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Net;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Web_MVC.Data;
 
 namespace asp2 {
@@ -19,6 +23,7 @@ namespace asp2 {
         public dataController(ILogger<dataController> logger) {
         _logger = logger;
         }*/
+        long idUser = 1;
 
         Web_MVCContext db;
         public WasteController(Web_MVCContext context) {
@@ -36,15 +41,15 @@ namespace asp2 {
         }
         public class WasteJSON {
             public string Category { get; set; }
-            public long Id { get; set; }
+            public long? Id { get; set; }
             public double Value { get; set; }
             public string? Comment { get; set; }
-
-            public WasteJSON(long id, string category, double val, string comm) {
+            [Newtonsoft.Json.JsonConstructor]
+            public WasteJSON(long? id, string category, double value, string comment) {
 
                 Category = category;
-                Value = val;
-                Comment = comm;
+                Value = value;
+                Comment = comment;
                 Id = id;
             }
             public WasteJSON(Waste waist) {
@@ -102,10 +107,10 @@ namespace asp2 {
             }*/
             return Sums;
         }
-        
+
 
         public ActionResult<IEnumerable<WasteJSON>> GetWastesOfOneDay(int year, int month, int day) {
-            string dateStr = day+"." + month + "." + year;
+            string dateStr = day + "." + month + "." + year;
             DateOnly.TryParse(dateStr, out DateOnly dateMonth);
 
             int daysInThisMonth = DateTime.DaysInMonth(dateMonth.Year, dateMonth.Month);
@@ -116,13 +121,72 @@ namespace asp2 {
             List<WasteJSON> daysToJSON = new();
             //List<double> Sums = new List<double>();
 
-                var waistsFromDb = db.Wastes.Include(w => w.IdUserNavigation).Include(w => w.IdCategoryNavigation).Where(w => w.IdUser == 1 && w.DayDate == dateMonth);
-            foreach (var wasteDb in waistsFromDb)
-            {
-             
-                daysToJSON.Add(new WasteJSON(wasteDb));   
+            var waistsFromDb = db.Wastes.Include(w => w.IdUserNavigation).Include(w => w.IdCategoryNavigation).Where(w => w.IdUser == 1 && w.DayDate == dateMonth);
+            foreach (var wasteDb in waistsFromDb) {
+
+                daysToJSON.Add(new WasteJSON(wasteDb));
             }
             return daysToJSON;
+        }
+
+
+        private async Task<Category> findOrCreateCategoryByName(string nameCategory) {
+            Category? newCategory = await db.Categories.FirstOrDefaultAsync(c => c.IdUser == idUser && c.NameCategory == nameCategory);
+            if (newCategory == null) {
+                newCategory = new() {
+                    IdCategory = await db.Categories.MaxAsync(c => c.IdCategory) + 1,
+                    IdUser = idUser,
+                    NameCategory = nameCategory,
+                    UsedCountCategory = 1
+                };
+                //добавляем эту категорию в бд
+                await db.Categories.AddAsync(newCategory);
+            }
+            return newCategory;
+        }
+        [HttpPost]
+        public async Task<ActionResult> AddWasteToDay(string date) {
+            var streamReader = new StreamReader(Request.Body);
+            string requestBody = await streamReader.ReadToEndAsync();
+            //dynamic data = JObject.Parse(requestBody);
+            WasteJSON? wasteFromReq = JsonConvert.DeserializeObject<WasteJSON>(requestBody);
+
+
+            if (wasteFromReq.Id != null) {
+                Waste CurrentWaste = await db.Wastes.Include(w => w.IdCategoryNavigation).SingleAsync(w => w.IdWaste == wasteFromReq.Id);//нашли объект который изменяем
+
+                if (CurrentWaste.IdCategoryNavigation.NameCategory != wasteFromReq.Category) {//проверяем, изменилась ли категория
+                    var newCategory = await findOrCreateCategoryByName(wasteFromReq.Category);
+
+                    //меняем id категории траты на новый
+                    CurrentWaste.IdCategory = newCategory.IdCategory;
+                    //снимаем одно использование у старой категории
+                    CurrentWaste.IdCategoryNavigation.UsedCountCategory -= 1;
+                    //если это была последняя использованная категория, удаляем ее
+                    if (CurrentWaste.IdCategoryNavigation.UsedCountCategory <= 0) {
+                        db.Categories.Remove(CurrentWaste.IdCategoryNavigation);
+                    }
+                    //db.Categories.Where(c => c.IdUser == idUser && c.NameCategory == data.category.ToSring());
+                }
+                if (CurrentWaste.Value != wasteFromReq.Value)
+                    CurrentWaste.Value = wasteFromReq.Value;
+                if (CurrentWaste.Comment != wasteFromReq.Comment)
+                    CurrentWaste.Comment = wasteFromReq.Comment;
+            }
+            else {
+                var newCategory = await findOrCreateCategoryByName(wasteFromReq.Category);
+                Waste newWaste = new() {
+                    IdWaste = await db.Wastes.MaxAsync(c => c.IdWaste) + 1,
+                    Comment = wasteFromReq.Comment,
+                    IdCategory = newCategory.IdCategory,
+                    IdUser = idUser,
+                    Value = wasteFromReq.Value,
+                    DayDate = DateOnly.Parse(date)
+                };
+                await db.Wastes.AddAsync(newWaste);
+            }
+            await db.SaveChangesAsync();
+            return null;
         }
         /*
                 [HttpGet("getMonyLimitOfMonth/{dateStr}")]

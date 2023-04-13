@@ -8,6 +8,7 @@
 @import url(../css/calendar/__day/_text/calendar__day_text.css);
 @import url(../css/calendar/__day/_text/calendar__day_text-top.css);
 @import url(../css/calendar/__day/_text/calendar__day_text-bottom.css);
+
 @import url(../css/popup/popup.css);
 @import url(../css/popup/__background/popup__background.css);
 @import url(../css/popup/__background/popup__dackground-dark.css);
@@ -17,7 +18,7 @@
 
 @import url(../css/popup/__header/popup__header.css);
 @import url(../css/popup/_opened/popup_opened.css);
-@import url(../css/popup/__form-container/popup__form-container.css);
+@import url(../css/popup/__container/popup__container.css);
 
 @import url(../css/popup/__title/popup__title.css);
 @import url(../css/popup/__admin/popup__admin.css);

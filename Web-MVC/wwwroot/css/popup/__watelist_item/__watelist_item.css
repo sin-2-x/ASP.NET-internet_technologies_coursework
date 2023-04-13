@@ -1,0 +1,11 @@
+.popup__watelist_item {
+    display: grid;
+    grid-template-columns: 20% 80%;
+    margin-bottom: 5px;
+    border: solid;
+    border-width: 1px;
+    border-color: rgb(232, 234, 236);
+    border-radius: 15px;
+    height: 4rem; 
+    padding-left: 20px;
+}

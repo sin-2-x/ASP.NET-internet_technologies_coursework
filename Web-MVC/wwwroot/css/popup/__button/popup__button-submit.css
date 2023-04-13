@@ -1,0 +1,15 @@
+.popup__button-submit{
+
+  margin-top: 48px;
+ 
+  margin-bottom: 37px;
+  
+}
+
+@media screen and (max-width: 899px) {
+  .popup__button-submit {
+      
+      margin-top: 45px;
+      margin-bottom: 13px;
+  }
+}
