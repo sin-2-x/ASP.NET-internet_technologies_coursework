@@ -1,25 +1,23 @@
 export default class Api {
-    constructor ({url, token}) {
+    constructor({ url, token }) {
         this._url = url;
         this._token = token;
     }
 
-    _checkData (res) {
+    async _checkData(res) {
         if (!res.ok) {
             return Promise.reject(`Ошибка: ${res.status}`);
         }
-        return res.json();
+        return await res.json();
     }
 
-    // getUserInfo() {
-    //     return fetch(`${this._url}/users/me`, {
-    //         method: 'GET',
-    //         headers: {
-    //             authorization: this._token
-    //         }
-    //     })
-    //         .then(this._checkData);
-    // }
+    async getWaists(montDate) {
+        const response = await fetch(`Waste/GetWastes?year=${montDate.getFullYear()}&month=${montDate.getMonth() + 1}`, {
+            method: "GET",
+            headers: { "Accept": "application/json" }
+        });
+        return await this._checkData(response);
+    }
 
     // getInitialCards() {
     //     return fetch(`${this._url}/cards`, {
@@ -50,16 +48,16 @@ export default class Api {
     //         .then(this._checkData);
     // }
 
-     async addWaste(waste, date) {
-         resp = await fetch(`Waste/AddWasteToDay?date=` + date, {
-             method: 'POST',
-             headers: {
-    //             authorization: this._token,
-                 'Content-Type': 'application/json'
-             },
-             body: JSON.stringify(waste)
-     });
-     return  this._checkData(resp);
+    async addWaste(waste, date) {
+        resp = await fetch(`Waste/AddWasteToDay?date=` + date, {
+            method: 'POST',
+            headers: {
+                //             authorization: this._token,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(waste)
+        });
+        return this._checkData(resp);
     }
 
     // deleteCard (id) {
@@ -106,5 +104,5 @@ export default class Api {
     //     })
     //         .then(this._checkData);
     // }
-     }
+}
 

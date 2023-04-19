@@ -15,6 +15,8 @@
 @import url(../css/popup/__background/popup__dackground-transparent.css);
 
 @import url(../css/popup/__watelist_item/__watelist_item.css);
+@import url(../css/popup/__watelist_delete_btn/popup__watelist_delete_btn.css);
+@import url(../css/popup/__watelist_delete_btn/popup__watelist_delete_btn-opend.css);
 
 @import url(../css/popup/__header/popup__header.css);
 @import url(../css/popup/_opened/popup_opened.css);

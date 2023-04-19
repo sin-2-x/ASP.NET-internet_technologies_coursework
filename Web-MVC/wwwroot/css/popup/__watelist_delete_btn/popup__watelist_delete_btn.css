@@ -1,0 +1,12 @@
+.popup__watelist_delete_btn {
+    position: absolute;
+    right: 0;
+    background-color: rgb(238, 239, 244);
+    border-radius: 15px;
+    align-self: center;
+    padding: 6px 8px;
+    margin-right: 7px;
+    visibility: hidden;
+    transition: 0.3s cubic-bezier(.15,-0.03,0,1.06);
+    opacity: 0;
+}

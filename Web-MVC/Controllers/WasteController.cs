@@ -12,11 +12,13 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Web_MVC.Data;
 
-namespace asp2 {
+namespace asp2
+{
     //[ApiController]
     //[Route("data")]
     /*[Authorize]*/
-    public class WasteController : ControllerBase {
+    public class WasteController : ControllerBase
+    {
 
         /*private readonly ILogger<dataController> _logger;
 
@@ -26,33 +28,39 @@ namespace asp2 {
         long idUser = 1;
 
         Web_MVCContext db;
-        public WasteController(Web_MVCContext context) {
+        public WasteController(Web_MVCContext context)
+        {
             db = context;
 
         }
 
-        public class DayJSON {
+        public class DayJSON
+        {
             public string Date { get; set; }
             public double Sum { get; set; }
-            public DayJSON(DateOnly date, double sum) {
+            public DayJSON(DateOnly date, double sum)
+            {
                 Date = date.ToString();
                 Sum = sum;
             }
         }
-        public class WasteJSON {
+        public class WasteJSON
+        {
             public string Category { get; set; }
             public long? Id { get; set; }
             public double Value { get; set; }
             public string? Comment { get; set; }
             [Newtonsoft.Json.JsonConstructor]
-            public WasteJSON(long? id, string category, double value, string comment) {
+            public WasteJSON(long? id, string category, double value, string comment)
+            {
 
                 Category = category;
                 Value = value;
                 Comment = comment;
                 Id = id;
             }
-            public WasteJSON(Waste waist) {
+            public WasteJSON(Waste waist)
+            {
 
                 Category = waist.IdCategoryNavigation.NameCategory;
                 Value = waist.Value;
@@ -61,11 +69,13 @@ namespace asp2 {
             }
 
         }
-        public async Task<IActionResult> Index() {
+        public async Task<IActionResult> Index()
+        {
             return Problem("Entity set 'Web_MVCContext.Category'  is null.");
         }
         //[HttpGet("GetWastesByDays/dateStr")]
-        public ActionResult<IEnumerable<double>> GetWastes(int year, int month) {
+        public ActionResult<IEnumerable<double>> GetWastes(int year, int month)
+        {
             string dateStr = "1." + month + "." + year;
             DateOnly.TryParse(dateStr, out DateOnly dateMonth);
 
@@ -86,7 +96,8 @@ namespace asp2 {
             }
             //заполнение нынешнего месяца
             */
-            for (int i = 1; i <= daysInThisMonth; i++) {
+            for (int i = 1; i <= daysInThisMonth; i++)
+            {
                 //int dayNumber = i;
                 lockalDate = dateMonth.AddDays(i - 1);
                 //var eValue = db.Wastes.Where().Where(w => w.DayDate == lockalDate).ToList().Count()/*.Sum(p => p.Value)*/;
@@ -109,7 +120,8 @@ namespace asp2 {
         }
 
 
-        public ActionResult<IEnumerable<WasteJSON>> GetWastesOfOneDay(int year, int month, int day) {
+        public ActionResult<IEnumerable<WasteJSON>> GetWastesOfOneDay(int year, int month, int day)
+        {
             string dateStr = day + "." + month + "." + year;
             DateOnly.TryParse(dateStr, out DateOnly dateMonth);
 
@@ -122,7 +134,8 @@ namespace asp2 {
             //List<double> Sums = new List<double>();
 
             var waistsFromDb = db.Wastes.Include(w => w.IdUserNavigation).Include(w => w.IdCategoryNavigation).Where(w => w.IdUser == 1 && w.DayDate == dateMonth);
-            foreach (var wasteDb in waistsFromDb) {
+            foreach (var wasteDb in waistsFromDb)
+            {
 
                 daysToJSON.Add(new WasteJSON(wasteDb));
             }
@@ -130,10 +143,13 @@ namespace asp2 {
         }
 
 
-        private async Task<Category> findOrCreateCategoryByName(string nameCategory) {
+        private async Task<Category> findOrCreateCategoryByName(string nameCategory)
+        {
             Category? newCategory = await db.Categories.FirstOrDefaultAsync(c => c.IdUser == idUser && c.NameCategory == nameCategory);
-            if (newCategory == null) {
-                newCategory = new() {
+            if (newCategory == null)
+            {
+                newCategory = new()
+                {
                     IdCategory = await db.Categories.MaxAsync(c => c.IdCategory) + 1,
                     IdUser = idUser,
                     NameCategory = nameCategory,
@@ -141,21 +157,26 @@ namespace asp2 {
                 };
                 //добавляем эту категорию в бд
                 await db.Categories.AddAsync(newCategory);
+
             }
+
             return newCategory;
         }
         [HttpPost]
-        public async Task<ActionResult> AddWasteToDay(string date) {
+        public async Task<ActionResult> AddWasteToDay(string date)
+        {
             var streamReader = new StreamReader(Request.Body);
             string requestBody = await streamReader.ReadToEndAsync();
             //dynamic data = JObject.Parse(requestBody);
             WasteJSON? wasteFromReq = JsonConvert.DeserializeObject<WasteJSON>(requestBody);
 
 
-            if (wasteFromReq.Id != null) {
+            if (wasteFromReq.Id != null)
+            {
                 Waste CurrentWaste = await db.Wastes.Include(w => w.IdCategoryNavigation).SingleAsync(w => w.IdWaste == wasteFromReq.Id);//нашли объект который изменяем
 
-                if (CurrentWaste.IdCategoryNavigation.NameCategory != wasteFromReq.Category) {//проверяем, изменилась ли категория
+                if (CurrentWaste.IdCategoryNavigation.NameCategory != wasteFromReq.Category)
+                {//проверяем, изменилась ли категория
                     var newCategory = await findOrCreateCategoryByName(wasteFromReq.Category);
 
                     //меняем id категории траты на новый
@@ -163,7 +184,8 @@ namespace asp2 {
                     //снимаем одно использование у старой категории
                     CurrentWaste.IdCategoryNavigation.UsedCountCategory -= 1;
                     //если это была последняя использованная категория, удаляем ее
-                    if (CurrentWaste.IdCategoryNavigation.UsedCountCategory <= 0) {
+                    if (CurrentWaste.IdCategoryNavigation.UsedCountCategory <= 0)
+                    {
                         db.Categories.Remove(CurrentWaste.IdCategoryNavigation);
                     }
                     //db.Categories.Where(c => c.IdUser == idUser && c.NameCategory == data.category.ToSring());
@@ -173,9 +195,11 @@ namespace asp2 {
                 if (CurrentWaste.Comment != wasteFromReq.Comment)
                     CurrentWaste.Comment = wasteFromReq.Comment;
             }
-            else {
+            else
+            {
                 var newCategory = await findOrCreateCategoryByName(wasteFromReq.Category);
-                Waste newWaste = new() {
+                Waste newWaste = new()
+                {
                     IdWaste = await db.Wastes.MaxAsync(c => c.IdWaste) + 1,
                     Comment = wasteFromReq.Comment,
                     IdCategory = newCategory.IdCategory,
